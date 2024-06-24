@@ -3,7 +3,7 @@ import logo from '../assets/images/logo.png'
 import { AuthContext } from '../provider/AuthProvider'
 import { Link } from 'react-router-dom'
 const Navbar = () => {
-    const { user } = useContext(AuthContext)
+    const { user , logOut } = useContext(AuthContext)
     return (
         <div className='navbar bg-base-100 shadow-sm container px-4 mx-auto'>
             <div className='flex-1'>
@@ -31,11 +31,11 @@ const Navbar = () => {
                         role='button'
                         className='btn btn-ghost btn-circle avatar'
                     >
-                        <div className='w-10 rounded-full' title=''>
+                        <div className='w-10 rounded-full' title={user?.displayName}>
                             <img
                                 referrerPolicy='no-referrer'
                                 alt='User Profile Photo'
-                                src=''
+                                src={user ?.photoURL}
                             />
                         </div>
                     </div>
@@ -44,19 +44,21 @@ const Navbar = () => {
                         className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52'
                     >
                         <li>
-                            <div className='justify-between'>Add Job</div>
+                            <Link to='add-job' className='justify-between'>Add Job</Link>
                         </li>
                         <li>
-                            <div>My Posted Jobs</div>
+                            <Link to='my-posted-jobs'>My Posted Jobs</Link>
                         </li>
                         <li>
-                            <div>My Bids</div>
+                            <Link to='my-bids'>My Bids</Link>
                         </li>
                         <li>
-                            <div>Bid Requests</div>
+                            <Link to='bid-request'>Bid Requests</Link>
                         </li>
                         <li className='mt-2'>
-                            <button className='bg-gray-200 block text-center'>Logout</button>
+
+                            <button onClick={logOut}
+                             className='bg-gray-200 block text-center'>Logout</button>
                         </li>
                     </ul>
                 </div>}
