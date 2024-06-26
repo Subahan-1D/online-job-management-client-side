@@ -40,12 +40,12 @@ export default function Carousel() {
                 </SwiperSlide>
                 <SwiperSlide>
                     <Slide image={carousel2}
-                        text='Get Your Web Development Projects Done in minutes'
+                        text='Get Your Graphic Design  Done in minutes'
                     ></Slide>
                 </SwiperSlide>
                 <SwiperSlide>
                     <Slide image={carousel3}
-                        text='Get Your Web Development Projects Done in minutes'
+                        text='Get Your Digital Marketing Campaigns Up running'
                     ></Slide>
                 </SwiperSlide>
             </Swiper>
