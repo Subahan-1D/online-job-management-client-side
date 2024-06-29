@@ -6,7 +6,11 @@ import { Navigate, useLocation } from "react-router-dom";
 const PrivateRoute = ({children}) => {
     const {user, loading} = useContext(AuthContext)
     const location = useLocation()
-    if(loading) return <p>Loading...</p>
+    if(loading) return (
+      <div className="text-center mt-5 text-5xl">
+        <span className="loading loading-spinner text-secondary loading-lg"></span>
+      </div>
+    );
     if(user) return children
 
     return <Navigate to='/login' state={location.pathname} replace={true}></Navigate>
