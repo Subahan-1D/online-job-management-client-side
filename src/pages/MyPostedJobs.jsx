@@ -22,7 +22,7 @@ const MyPostedJobs = () => {
   const handleDelete = async (id) => {
     try {
       const { data } = await axios.delete(
-        `${import.meta.env.VITE_API_URL}/job/${id}`
+        `${import.meta.env.VITE_APP_URL}/job/${id}`
       );
       console.log(data);
       toast.success("Delete Successful");

@@ -9,6 +9,7 @@ const Login = () => {
     const navigate = useNavigate('/')
     const {  signIn,signInWithGoogle} = useContext(AuthContext)
     const [showPassword, setShowPassword] = useState(false)
+    const from = location.state || '/'
 // Google Sign in 
 
 const handleGoogleSignIn = async() =>{
@@ -35,7 +36,7 @@ const handleGoogleSignIn = async() =>{
         const result = await signIn(email,password)
         console.log(result);
         toast.success('Sign In Successful')
-        navigate('/')
+        navigate(from ,{replace:true})
     } catch (err){
         console.log(err);
         toast.error(err?.message)

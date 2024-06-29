@@ -52,7 +52,7 @@ const TabCategories = () => {
                 <JobCard key={job._id} job={job}></JobCard>
               ))}
           </div>
-        </TabPanel>
+        </TabPanel> 
       </div>
     </Tabs>
   );
