@@ -3,7 +3,7 @@
 import { Link } from "react-router-dom";
 
 const JobCard = ({job}) => {
-  const {description, title,category, min_price, max_price, _id,deadline} = job || {}
+  const {description, title,category, min_price, max_price, _id,deadline,job_title} = job || {}
   return (
     <Link
       to={`/job/${_id}`}
@@ -19,7 +19,7 @@ const JobCard = ({job}) => {
       </div>
 
       <div>
-        <h1 className="mt-2 text-lg font-semibold text-gray-800 ">{title}</h1>
+        <h1 className="mt-2 text-lg font-semibold text-gray-800 ">{job_title}</h1>
 
         <p title={description} className="mt-2 text-sm text-gray-600 ">
           {description.substring(0, 70)}...

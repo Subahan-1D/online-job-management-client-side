@@ -1,17 +1,19 @@
 import { useContext, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import toast from "react-hot-toast";
 const JobDetails = () => {
+  const navigate = useNavigate();
   const [startDate, setStartDate] = useState(new Date());
   const { user } = useContext(AuthContext);
   const job = useLoaderData();
   const {
     _id,
     title,
+    job_title,
     category,
     description,
     min_price,
@@ -41,6 +43,7 @@ const JobDetails = () => {
       email,
       status,
       title,
+      job_title,
       category,
       deadline,
       buyer,
@@ -48,12 +51,16 @@ const JobDetails = () => {
     // console.log(bidData);
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/bid`,
+        `${import.meta.env.VITE_APP_URL}/bid`,
         bidData
       );
       console.log(data);
+      toast.success('Bid Placed Successful')
+      navigate('/my-bids')
+      
     } catch (err) {
-      console.log(err);
+      console.log(err)
+      console.log('Hi i am error' , err.message);
     }
   };
   return (
@@ -71,7 +78,7 @@ const JobDetails = () => {
 
         <div>
           <h1 className="mt-2 text-3xl font-semibold text-gray-800 ">
-            {title}
+            {job_title}
           </h1>
 
           <p className="mt-2 text-lg text-gray-600 ">{description}</p>

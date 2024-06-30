@@ -6,46 +6,46 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 const AddJob = () => {
-      const [startDate, setStartDate] = useState(new Date());
-      const navigate = useNavigate()
-      const {user} = useContext(AuthContext);
-    const handleFromSubmit = async (e) => {
-      // if(user?.email === email) return  toast.error('Action not permitted')
-      e.preventDefault();
-      const from = e.target;
-      const job_title = from.job_title.value;
-      const email = from.email.value;
-      const deadline = startDate;
-      const category = from.category.value;
-      const min_price = parseFloat(from.min_price.value);
-      const max_price = parseFloat(from.max_price.value);
-      const description = from.description.value;
-      const jobData = {
-        job_title,
+  const [startDate, setStartDate] = useState(new Date());
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const handleFromSubmit = async (e) => {
+    // if(user?.email === email) return  toast.error('Action not permitted')
+    e.preventDefault();
+    const from = e.target;
+    const job_title = from.job_title.value;
+    const email = from.email.value;
+    const deadline = startDate;
+    const category = from.category.value;
+    const min_price = parseFloat(from.min_price.value);
+    const max_price = parseFloat(from.max_price.value);
+    const description = from.description.value;
+    const jobData = {
+      job_title,
+      email,
+      deadline,
+      category,
+      min_price,
+      max_price,
+      description,
+      buyer: {
         email,
-        deadline,
-        category,
-        min_price,
-        max_price,
-        description,
-        buyer: {
-          email,
-          name: user?.displayName,
-          photo: user?.photoURL,
-        },
-      };
-      try {
-        const { data } = await axios.post(
-          `${import.meta.env.VITE_APP_URL}/job`,
-          jobData
-        );
-        console.log(data);
-        toast.success("Job Data Updated Successful");
-        navigate("/my-posted-jobs");
-      } catch (err) {
-        console.log(err);
-      }
+        name: user?.displayName,
+        photo: user?.photoURL,
+      },
     };
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_APP_URL}/job`,
+        jobData
+      );
+      console.log(data);
+      toast.success("Job Data Updated Successful");
+      navigate("/my-posted-jobs");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-306px)] my-12">
       <section className=" p-2 md:p-6 mx-auto bg-white rounded-md shadow-md ">
