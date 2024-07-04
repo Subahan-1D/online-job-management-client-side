@@ -3,26 +3,30 @@ import { AuthContext } from "../provider/AuthProvider";
 import axios from "axios";
 import toast from "react-hot-toast";
 const BidRequests = () => {
-      const [bids, setBids] = useState([]);
-      const { user } = useContext(AuthContext);
-      useEffect(() => {
-        bidData();
-      }, [user]);
-      const bidData = async () => {
-        const { data } = await axios(
-          `${import.meta.env.VITE_APP_URL}/bid-request/${user?.email}`,
-          bidData
-        );
-        setBids(data);
-      };
-    // handle status 
-    const handleStatus = async (id,prevStatus,status) =>{
-      if(prevStatus === status) return toast.error("Sorry, your request has been confirmed");
-        console.log(id, prevStatus, status);
-        const {data} = await axios.patch(`${import.meta.env.VITE_APP_URL}/bid/${id}`,{status})
-       console.log('Status Data',data);
-       bidData();
-    }
+  const [bids, setBids] = useState([]);
+  const { user } = useContext(AuthContext);
+  useEffect(() => {
+    bidData();
+  }, [user]);
+  const bidData = async () => {
+    const { data } = await axios(
+      `${import.meta.env.VITE_APP_URL}/bid-request/${user?.email}`,
+      { withCredentials: true }
+    );
+    setBids(data);
+  };
+  // handle status
+  const handleStatus = async (id, prevStatus, status) => {
+    if (prevStatus === status)
+      return toast.error("Sorry, your request has been confirmed");
+    console.log(id, prevStatus, status);
+    const { data } = await axios.patch(
+      `${import.meta.env.VITE_APP_URL}/bid/${id}`,
+      { status }
+    );
+    console.log("Status Data", data);
+    bidData();
+  };
   return (
     <section className="container px-4 mx-auto pt-12">
       <div className="flex items-center gap-x-3">

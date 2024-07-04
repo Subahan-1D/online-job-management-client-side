@@ -6,6 +6,7 @@ import axios from "axios";
 
 const TabCategories = () => {
  const [servicesJobs, setJobs] = useState([])
+ 
  useEffect(()=>{
   const getData = async () =>{
     const {data} = await axios(`${import.meta.env.VITE_APP_URL}/servicesJobs`)
@@ -34,25 +35,30 @@ const TabCategories = () => {
         </div>
         <TabPanel>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 xl:mt-16  lg:grid-cols-3 xl:grid-cols-4 ">
-            {servicesJobs.filter((j) => j.category === "Web Development").map((job) => (
+            {servicesJobs &&
+              servicesJobs
+                .filter((j) => j.category === "Web Development")
+                .map((job) => <JobCard key={job._id} job={job}></JobCard>)}
+          </div>
+        </TabPanel>
+        <TabPanel>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 xl:mt-16  lg:grid-cols-3 xl:grid-cols-4 ">
+            {servicesJobs
+              .filter((j) => j.category === "Graphics Design")
+              .map((job) => (
                 <JobCard key={job._id} job={job}></JobCard>
               ))}
           </div>
         </TabPanel>
         <TabPanel>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 xl:mt-16  lg:grid-cols-3 xl:grid-cols-4 ">
-            {servicesJobs.filter((j) => j.category === "Graphics Design").map((job) => (
+            {servicesJobs
+              .filter((j) => j.category === "Digital Marketing")
+              .map((job) => (
                 <JobCard key={job._id} job={job}></JobCard>
               ))}
           </div>
         </TabPanel>
-        <TabPanel>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 xl:mt-16  lg:grid-cols-3 xl:grid-cols-4 ">
-            {servicesJobs.filter((j) => j.category === "Digital Marketing").map((job) => (
-                <JobCard key={job._id} job={job}></JobCard>
-              ))}
-          </div>
-        </TabPanel> 
       </div>
     </Tabs>
   );

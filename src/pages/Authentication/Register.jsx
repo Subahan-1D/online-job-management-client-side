@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axios from "axios";
 const Register = () => {
   const navigate = useNavigate("/");
   const location = useLocation()
@@ -24,9 +25,20 @@ const Register = () => {
       navigate('/')
     }
   },[navigate, user])
+
+  // google sign in 
   const handleGoogleSignIn = async () => {
     try {
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
+      console.log(result.user);
+      const data = await axios.post(
+        `${import.meta.env.VITE_APP_URL}/jwt`,
+        {
+          email: result?.user?.email,
+        },
+        { withCredentials: true }
+      );
+      console.log(data);
       toast.success("Sign In Successful");
       navigate(from, { replace: true });
     } catch (err) {
@@ -48,9 +60,17 @@ const Register = () => {
 
     try {
       const result = await createUser(email, password);
-      console.log(result);
       await updateUserProfile(name, photo);
-      setUser({ ...user, photoURL: photo, displayName: name });
+      // optimistic UI Update
+      setUser({ ...result?.user, photoURL: photo, displayName: name });
+      const data = await axios.post(
+        `${import.meta.env.VITE_APP_URL}/jwt`,
+        {
+          email: result?.user?.email,
+        },
+        { withCredentials: true }
+      );
+      console.log(data);
        navigate(from, { replace: true });
       toast.success(" SignUp Successful");
     } catch (err) {

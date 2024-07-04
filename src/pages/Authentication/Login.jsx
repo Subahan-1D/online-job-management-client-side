@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../provider/AuthProvider"
 import toast from "react-hot-toast"
 import { FaEye, FaEyeSlash } from "react-icons/fa"
+import axios from "axios"
 const Login = () => {
     const navigate = useNavigate('/')
     const {  signIn,signInWithGoogle, user , loading} = useContext(AuthContext)
@@ -19,9 +20,14 @@ useEffect(()=>{
 
 const handleGoogleSignIn = async() =>{
     try{
-        await signInWithGoogle()
+       const result = await signInWithGoogle()
+       console.log(result.user)
+       const data = await axios.post(`${import.meta.env.VITE_APP_URL}/jwt`, {
+         email: result?.user?.email,
+       },{withCredentials:true});
+       console.log(data)
         toast.success('Sign In Successful')
-        navigate('/')
+        navigate(from, { replace: true });
     } catch (err){
         console.log(err);
         toast.error(err?.message)
@@ -39,7 +45,16 @@ const handleGoogleSignIn = async() =>{
     console.log(email,password);
     try{
         const result = await signIn(email,password)
-        console.log(result);
+        console.log(result.user);
+        // get token from server using email
+        const data = await axios.post(
+          `${import.meta.env.VITE_APP_URL}/jwt`,
+          {
+            email: result?.user?.email,
+          },
+          { withCredentials: true }
+        );
+        console.log(data);
         toast.success('Sign In Successful')
         navigate(from ,{replace:true})
     } catch (err){
