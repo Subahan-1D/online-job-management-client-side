@@ -1,26 +1,25 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../provider/AuthProvider";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import useAuth from "../hooks/useAuth";
 
 const MyBids = () => {
   const [bids, setBids] = useState([]);
-  const { user } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure()
+  const { user } = useAuth()
   useEffect(() => {
     bidData();
   }, [user]);
   const bidData = async () => {
-    const { data } = await axios(
-      `${import.meta.env.VITE_APP_URL}/my-bids/${user?.email}`,
-     bidData
-    );
+    const { data } = await axiosSecure(
+      `/my-bids/${user?.email}` );
     setBids(data);
   };
 
   // handle status
   const handleStatus = async (id,status) => {
-    const { data } = await axios.patch(
-      `${import.meta.env.VITE_APP_URL}/bid/${id}`, { status},{withCredentials:true} );
+    const { data } = await axiosSecure.patch(
+      `/bid/${id}`, { status});
     console.log("Status Data", data);
     bidData();
   };

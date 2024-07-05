@@ -1,32 +1,63 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../provider/AuthProvider";
-import axios from "axios";
+
 import toast from "react-hot-toast";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import useAuth from "../hooks/useAuth";
 const BidRequests = () => {
-  const [bids, setBids] = useState([]);
-  const { user } = useContext(AuthContext);
-  useEffect(() => {
-    bidData();
-  }, [user]);
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure()
+const queryClient = useQueryClient()
+   const {data:bids=[],isLoading} =useQuery({
+    queryFn:() => bidData(),
+    queryKey:['bids', user?.email],
+    
+})
+console.log(bids)
+console.log(isLoading)
+  // const [bids, setBids] = useState([]);
+  
+  // useEffect(() => {
+  //   bidData();
+  // }, [user]);
+
   const bidData = async () => {
-    const { data } = await axios(
-      `${import.meta.env.VITE_APP_URL}/bid-request/${user?.email}`,
-      { withCredentials: true }
-    );
-    setBids(data);
+    const { data } = await axiosSecure(`/bid-request/${user?.email}` );
+    return data
   };
+
+  // jehutu data ta change ba update korteci tai useMutation use
+  const { mutateAsync} = useMutation({
+    mutationFn: async({id,status}) =>{
+       const { data } = await axiosSecure.patch(`/bid/${id}`,{ status });
+    console.log("Status Data", data);
+    return data
+    },
+    onSuccess:()=>{
+      console.log('Good data updated')
+      toast.success('Updated')
+      // refresh for ui lates sohoj
+      // refetch()
+      // kothin system
+      queryClient.invalidateQueries(
+        {queryKey:['bids',]}
+      )
+    }
+  })
+
+
+
+
+
   // handle status
   const handleStatus = async (id, prevStatus, status) => {
     if (prevStatus === status)
       return toast.error("Sorry, your request has been confirmed");
     console.log(id, prevStatus, status);
-    const { data } = await axios.patch(
-      `${import.meta.env.VITE_APP_URL}/bid/${id}`,
-      { status }
-    );
-    console.log("Status Data", data);
-    bidData();
+   await mutateAsync({id,status})
   };
+
+
+  if(isLoading) return <p>Data is still loading...</p>
   return (
     <section className="container px-4 mx-auto pt-12">
       <div className="flex items-center gap-x-3">
