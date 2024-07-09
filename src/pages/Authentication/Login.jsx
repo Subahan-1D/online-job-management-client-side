@@ -46,7 +46,7 @@ const handleGoogleSignIn = async() =>{
     try{
         const result = await signIn(email,password)
         console.log(result.user);
-        // get token from server using email
+        // get token from server using 
         const data = await axios.post(
           `${import.meta.env.VITE_APP_URL}/jwt`,
           {
